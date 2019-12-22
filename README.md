@@ -1,5 +1,5 @@
 # gocache
-Simple thread-safe in-memory TRLU caching library for Go
+Simple thread-safe in-memory TLRU caching library for Go
 
 **If all you need is a thread-safe map for caching, we strongly encourage reviewing
 [sync.Map](https://golang.org/pkg/sync/#Map) for your use case**
@@ -15,7 +15,7 @@ go get github.com/BradLugo/gocache
 
 ### Quick Start
 
-```
+```go
 import (
 	"fmt"
 	"time"
@@ -24,17 +24,17 @@ import (
 )
 
 func main() {
-	// Create a cache with a default expiration time of 5 minutes, and which
+    // Create a cache with a default expiration time of 5 minutes, and which
 	// purges expired items every 10 minutes
-	c := cache.New(5*time.Minute, 10*time.Minute)
+	c := gocache.New(gocache.NoItemLimit, 5*time.Minute, 10*time.Minute)
 
 	// Set the value of the key "foo" to "bar", with the default expiration time
-	c.Set("foo", "bar", cache.DefaultExpiration)
+	c.Set("foo", "bar", gocache.DefaultExpiration)
 
 	// Set the value of the key "baz" to 42, with no expiration time
 	// (the item won't be removed until it is re-set, or removed using
 	// c.Delete("baz")
-	c.Set("baz", 42, cache.NoExpiration)
+	c.Set("baz", 42, gocache.NoExpiration)
 
 	// Get the string associated with the key "foo" from the cache
 	foo, found := c.Get("foo")
@@ -70,7 +70,7 @@ func main() {
 	c.Set("foo", &MyStruct, cache.DefaultExpiration)
 	if x, found := c.Get("foo"); found {
 		foo := x.(*MyStruct)
-			// ...
+		// ...
 	}
 }
 ```
