@@ -1,14 +1,14 @@
-package gocache_test
+package cashier_test
 
 import (
-	"gocache"
+	"cashier"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
 )
 
-var cacheItemTests = map[string]gocache.Item{
+var cacheItemTests = map[string]cashier.Item{
 	"a": {
 		Object:     1,
 		Expiration: 0,
@@ -41,10 +41,10 @@ type TestStruct struct {
 }
 
 func TestNew(t *testing.T) {
-	tc := gocache.New(gocache.NoItemLimit, gocache.DefaultExpiration, 0)
+	tc := cashier.New(cashier.NoItemLimit, cashier.DefaultExpiration, 0)
 
 	if assert.NotNil(t, tc) {
-		assert.Equal(t, tc.GetMap(), map[string]gocache.Item{})
+		assert.Equal(t, tc.GetMap(), map[string]cashier.Item{})
 		assert.Nil(t, tc.GetList())
 
 		a, found := tc.Get("a")
@@ -64,9 +64,9 @@ func TestNew(t *testing.T) {
 func TestCacheTimes(t *testing.T) {
 	var found bool
 
-	tc := gocache.New(gocache.NoItemLimit, 50*time.Millisecond, 1*time.Millisecond)
-	tc.Set("a", 1, gocache.DefaultExpiration)
-	tc.Set("b", 2, gocache.NoExpiration)
+	tc := cashier.New(cashier.NoItemLimit, 50*time.Millisecond, 1*time.Millisecond)
+	tc.Set("a", 1, cashier.DefaultExpiration)
+	tc.Set("b", 2, cashier.NoExpiration)
 	tc.Set("c", 3, 20*time.Millisecond)
 	tc.Set("d", 4, 70*time.Millisecond)
 
@@ -100,7 +100,7 @@ func TestCacheTimes(t *testing.T) {
 }
 
 func TestNewFrom(t *testing.T) {
-	m := map[string]gocache.Item{
+	m := map[string]cashier.Item{
 		"a": {
 			Object:     1,
 			Expiration: 0,
@@ -110,7 +110,7 @@ func TestNewFrom(t *testing.T) {
 			Expiration: 0,
 		},
 	}
-	tc := gocache.NewFrom(gocache.NoItemLimit, gocache.DefaultExpiration, 0, m)
+	tc := cashier.NewFrom(cashier.NoItemLimit, cashier.DefaultExpiration, 0, m)
 	a, found := tc.Get("a")
 	if !found {
 		t.Fatal("Did not find a")
@@ -128,8 +128,8 @@ func TestNewFrom(t *testing.T) {
 }
 
 func TestStorePointerToStruct(t *testing.T) {
-	tc := gocache.New(gocache.NoItemLimit, gocache.DefaultExpiration, 0)
-	tc.Set("foo", &TestStruct{Num: 1}, gocache.DefaultExpiration)
+	tc := cashier.New(cashier.NoItemLimit, cashier.DefaultExpiration, 0)
+	tc.Set("foo", &TestStruct{Num: 1}, cashier.DefaultExpiration)
 	x, found := tc.Get("foo")
 	if !found {
 		t.Fatal("*TestStruct was not found for foo")
@@ -148,8 +148,8 @@ func TestStorePointerToStruct(t *testing.T) {
 }
 
 func TestOnEvicted(t *testing.T) {
-	tc := gocache.New(gocache.NoItemLimit, gocache.DefaultExpiration, 0)
-	tc.Set("foo", 3, gocache.DefaultExpiration)
+	tc := cashier.New(cashier.NoItemLimit, cashier.DefaultExpiration, 0)
+	tc.Set("foo", 3, cashier.DefaultExpiration)
 	if tc.GetOnEvicted() != nil {
 		t.Fatal("tc.onEvicted is not nil")
 	}
@@ -158,7 +158,7 @@ func TestOnEvicted(t *testing.T) {
 		if k == "foo" && v.(int) == 3 {
 			works = true
 		}
-		tc.Set("bar", 4, gocache.DefaultExpiration)
+		tc.Set("bar", 4, cashier.DefaultExpiration)
 	})
 	tc.Delete("foo")
 	x, _ := tc.Get("bar")

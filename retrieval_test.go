@@ -1,7 +1,7 @@
-package gocache_test
+package cashier_test
 
 import (
-	"gocache"
+	"cashier"
 	"testing"
 	"time"
 
@@ -9,7 +9,7 @@ import (
 )
 
 func TestCache_Get(t *testing.T) {
-	tc := gocache.New(gocache.NoItemLimit, gocache.DefaultExpiration, 0)
+	tc := cashier.New(cashier.NoItemLimit, cashier.DefaultExpiration, 0)
 
 	for k, v := range cacheItemTests {
 		tc.Set(k, v.Object, time.Duration(v.Expiration))
@@ -27,7 +27,7 @@ func TestCache_Get(t *testing.T) {
 }
 
 func TestCache_GetWithExpiration(t *testing.T) {
-	tc := gocache.New(gocache.NoItemLimit, gocache.DefaultExpiration, 0)
+	tc := cashier.New(cashier.NoItemLimit, cashier.DefaultExpiration, 0)
 
 	for k, v := range cacheItemTests {
 		tc.Set(k, v.Object, time.Duration(v.Expiration))

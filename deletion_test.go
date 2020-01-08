@@ -1,7 +1,7 @@
-package gocache_test
+package cashier_test
 
 import (
-	"gocache"
+	"cashier"
 	"testing"
 	"time"
 
@@ -9,13 +9,13 @@ import (
 )
 
 func TestCache_Delete(t *testing.T) {
-	tc := gocache.New(gocache.NoItemLimit, gocache.DefaultExpiration, 0)
+	tc := cashier.New(cashier.NoItemLimit, cashier.DefaultExpiration, 0)
 
 	for k, v := range cacheItemTests {
 		tc.Set(k, v.Object, time.Duration(v.Expiration))
 	}
 
-	var deletionTestsMap = map[string]gocache.Item{}
+	var deletionTestsMap = map[string]cashier.Item{}
 	for k, v := range cacheItemTests {
 		deletionTestsMap[k] = v
 	}
@@ -27,5 +27,5 @@ func TestCache_Delete(t *testing.T) {
 	}
 
 	tc.Delete("keyNotInCache")
-	assert.Equal(t, tc.GetMap(), map[string]gocache.Item{})
+	assert.Equal(t, tc.GetMap(), map[string]cashier.Item{})
 }

@@ -1,4 +1,4 @@
-package gocache
+package cashier
 
 import "time"
 

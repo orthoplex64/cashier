@@ -1,16 +1,16 @@
-# gocache
+# cashier
 Simple thread-safe in-memory TLRU caching library for Go
 
 **If all you need is a thread-safe map for caching, we strongly encourage reviewing
 [sync.Map](https://golang.org/pkg/sync/#Map) for your use case**
 
-gocache is an in-memory key-value TLRU cache that is thread-safe and has the ability to store any object as the value.
+cashier is an in-memory key-value TLRU cache that is thread-safe and has the ability to store any object as the value.
 There are feature toggles for both time-awareness and LRU functionality
 
 ## Installation
 
 ```
-go get github.com/BradLugo/gocache
+go get github.com/BradLugo/cashier
 ```
 
 ### Quick Start
@@ -20,21 +20,21 @@ import (
 	"fmt"
 	"time"
 
-    "github.com/BradLugo/gocache"
+    cashier
 )
 
 func main() {
     // Create a cache with a default expiration time of 5 minutes, and which
 	// purges expired items every 10 minutes
-	c := gocache.New(gocache.NoItemLimit, 5*time.Minute, 10*time.Minute)
+	c := cashier.New(cashier.NoItemLimit, 5*time.Minute, 10*time.Minute)
 
 	// Set the value of the key "foo" to "bar", with the default expiration time
-	c.Set("foo", "bar", gocache.DefaultExpiration)
+	c.Set("foo", "bar", cashier.DefaultExpiration)
 
 	// Set the value of the key "baz" to 42, with no expiration time
 	// (the item won't be removed until it is re-set, or removed using
 	// c.Delete("baz")
-	c.Set("baz", 42, gocache.NoExpiration)
+	c.Set("baz", 42, cashier.NoExpiration)
 
 	// Get the string associated with the key "foo" from the cache
 	foo, found := c.Get("foo")
@@ -78,7 +78,7 @@ func main() {
 ## Versioning
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the
-[tags on this repository](https://github.com/BradLugo/gocache/tags). 
+[tags on this repository](https://github.com/BradLugo/cashier/tags). 
 
 ## License
 

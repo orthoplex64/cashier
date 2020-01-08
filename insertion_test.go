@@ -1,7 +1,7 @@
-package gocache_test
+package cashier_test
 
 import (
-	"gocache"
+	"cashier"
 	"testing"
 	"time"
 
@@ -9,7 +9,7 @@ import (
 )
 
 func TestCache_Set(t *testing.T) {
-	tc := gocache.New(gocache.NoItemLimit, gocache.DefaultExpiration, 0)
+	tc := cashier.New(cashier.NoItemLimit, cashier.DefaultExpiration, 0)
 
 	for k, v := range cacheItemTests {
 		tc.Set(k, v.Object, time.Duration(v.Expiration))
@@ -19,7 +19,7 @@ func TestCache_Set(t *testing.T) {
 }
 
 func TestCache_SetDefault(t *testing.T) {
-	tc := gocache.New(gocache.NoItemLimit, gocache.DefaultExpiration, 0)
+	tc := cashier.New(cashier.NoItemLimit, cashier.DefaultExpiration, 0)
 
 	for k, v := range cacheItemTests {
 		tc.Set(k, v.Object, time.Duration(v.Expiration))
@@ -29,7 +29,7 @@ func TestCache_SetDefault(t *testing.T) {
 }
 
 func TestCache_Add(t *testing.T) {
-	tc := gocache.New(gocache.NoItemLimit, gocache.DefaultExpiration, 0)
+	tc := cashier.New(cashier.NoItemLimit, cashier.DefaultExpiration, 0)
 
 	for k, v := range cacheItemTests {
 		err := tc.Add(k, v.Object, time.Duration(v.Expiration))
@@ -45,13 +45,13 @@ func TestCache_Add(t *testing.T) {
 }
 
 func TestCache_Replace(t *testing.T) {
-	tc := gocache.New(gocache.NoItemLimit, gocache.DefaultExpiration, 0)
+	tc := cashier.New(cashier.NoItemLimit, cashier.DefaultExpiration, 0)
 
 	for k, v := range cacheItemTests {
 		tc.Set(k, v.Object, time.Duration(v.Expiration))
 	}
 
-	replaceItemsTest := map[string]gocache.Item{
+	replaceItemsTest := map[string]cashier.Item{
 		"a": {
 			Object:     2,
 			Expiration: 0,
@@ -85,6 +85,6 @@ func TestCache_Replace(t *testing.T) {
 
 	assert.Equal(t, tc.GetMap(), replaceItemsTest)
 
-	err := tc.Replace("keyNotInCache", "thisShouldError", gocache.DefaultExpiration)
+	err := tc.Replace("keyNotInCache", "thisShouldError", cashier.DefaultExpiration)
 	assert.Error(t, err)
 }

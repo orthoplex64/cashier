@@ -1,4 +1,4 @@
-package gocache
+package cashier
 
 import (
 	"container/list"
@@ -39,13 +39,13 @@ type Item struct {
 	Expiration int64
 }
 
-func New(mi int, defaultExpiration, cleanupInterval time.Duration) *Cache {
+func New(maxItems int, defaultExpiration, cleanupInterval time.Duration) *Cache {
 	items := make(map[string]Item)
-	return newCacheWithJanitor(mi, defaultExpiration, cleanupInterval, items)
+	return newCacheWithJanitor(maxItems, defaultExpiration, cleanupInterval, items)
 }
 
-func NewFrom(mi int, defaultExpiration, cleanupInterval time.Duration, items map[string]Item) *Cache {
-	return newCacheWithJanitor(mi, defaultExpiration, cleanupInterval, items)
+func NewFrom(maxItems int, defaultExpiration, cleanupInterval time.Duration, items map[string]Item) *Cache {
+	return newCacheWithJanitor(maxItems, defaultExpiration, cleanupInterval, items)
 }
 
 func newCacheWithJanitor(mi int, de time.Duration, ci time.Duration, m map[string]Item) *Cache {
