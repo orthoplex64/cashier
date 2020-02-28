@@ -1,7 +1,8 @@
-package cashier_test
+package tlru_test
 
 import (
-	"cashier"
+	"cashier/internal/basecache"
+	"cashier/tlru"
 	"testing"
 	"time"
 
@@ -9,7 +10,7 @@ import (
 )
 
 func TestCache_Get(t *testing.T) {
-	tc := cashier.New(cashier.NoItemLimit, cashier.DefaultExpiration, 0)
+	tc := tlru.New(MaxUint, basecache.DefaultExpiration, 0)
 
 	for k, v := range cacheItemTests {
 		tc.Set(k, v.Object, time.Duration(v.Expiration))
@@ -27,7 +28,7 @@ func TestCache_Get(t *testing.T) {
 }
 
 func TestCache_GetWithExpiration(t *testing.T) {
-	tc := cashier.New(cashier.NoItemLimit, cashier.DefaultExpiration, 0)
+	tc := tlru.New(MaxUint, basecache.DefaultExpiration, 0)
 
 	for k, v := range cacheItemTests {
 		tc.Set(k, v.Object, time.Duration(v.Expiration))

@@ -1,7 +1,8 @@
-package cashier_test
+package tlru_test
 
 import (
-	"cashier"
+	"cashier/internal/basecache"
+	"cashier/tlru"
 	"testing"
 	"time"
 
@@ -9,7 +10,7 @@ import (
 )
 
 func TestCache_Set(t *testing.T) {
-	tc := cashier.New(cashier.NoItemLimit, cashier.DefaultExpiration, 0)
+	tc := tlru.New(MaxUint, basecache.DefaultExpiration, 0)
 
 	for k, v := range cacheItemTests {
 		tc.Set(k, v.Object, time.Duration(v.Expiration))
@@ -19,7 +20,7 @@ func TestCache_Set(t *testing.T) {
 }
 
 func TestCache_SetDefault(t *testing.T) {
-	tc := cashier.New(cashier.NoItemLimit, cashier.DefaultExpiration, 0)
+	tc := tlru.New(MaxUint, basecache.DefaultExpiration, 0)
 
 	for k, v := range cacheItemTests {
 		tc.Set(k, v.Object, time.Duration(v.Expiration))
@@ -29,7 +30,7 @@ func TestCache_SetDefault(t *testing.T) {
 }
 
 func TestCache_Add(t *testing.T) {
-	tc := cashier.New(cashier.NoItemLimit, cashier.DefaultExpiration, 0)
+	tc := tlru.New(MaxUint, basecache.DefaultExpiration, 0)
 
 	for k, v := range cacheItemTests {
 		err := tc.Add(k, v.Object, time.Duration(v.Expiration))
@@ -45,13 +46,13 @@ func TestCache_Add(t *testing.T) {
 }
 
 func TestCache_Replace(t *testing.T) {
-	tc := cashier.New(cashier.NoItemLimit, cashier.DefaultExpiration, 0)
+	tc := tlru.New(MaxUint, basecache.DefaultExpiration, 0)
 
 	for k, v := range cacheItemTests {
 		tc.Set(k, v.Object, time.Duration(v.Expiration))
 	}
 
-	replaceItemsTest := map[string]cashier.Item{
+	replaceItemsTest := map[string]basecache.Item{
 		"a": {
 			Object:     2,
 			Expiration: 0,
@@ -85,6 +86,6 @@ func TestCache_Replace(t *testing.T) {
 
 	assert.Equal(t, tc.GetMap(), replaceItemsTest)
 
-	err := tc.Replace("keyNotInCache", "thisShouldError", cashier.DefaultExpiration)
+	err := tc.Replace("keyNotInCache", "thisShouldError", basecache.DefaultExpiration)
 	assert.Error(t, err)
 }

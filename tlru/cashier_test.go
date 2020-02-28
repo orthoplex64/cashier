@@ -1,14 +1,17 @@
-package cashier_test
+package tlru_test
 
 import (
-	"cashier"
+	"cashier/internal/basecache"
+	"cashier/tlru"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
 )
 
-var cacheItemTests = map[string]cashier.Item{
+const MaxUint = ^uint(0)
+
+var cacheItemTests = map[string]basecache.Item{
 	"a": {
 		Object:     1,
 		Expiration: 0,
@@ -41,11 +44,11 @@ type TestStruct struct {
 }
 
 func TestNew(t *testing.T) {
-	tc := cashier.New(cashier.NoItemLimit, cashier.DefaultExpiration, 0)
+	tc := tlru.New(MaxUint, basecache.DefaultExpiration, 0)
 
 	if assert.NotNil(t, tc) {
-		assert.Equal(t, tc.GetMap(), map[string]cashier.Item{})
-		assert.Nil(t, tc.GetList())
+		assert.Equal(t, tc.GetMap(), map[string]basecache.Item{})
+		//assert.Nil(t, tc.GetList())
 
 		a, found := tc.Get("a")
 		assert.False(t, found)
@@ -64,9 +67,9 @@ func TestNew(t *testing.T) {
 func TestCacheTimes(t *testing.T) {
 	var found bool
 
-	tc := cashier.New(cashier.NoItemLimit, 50*time.Millisecond, 1*time.Millisecond)
-	tc.Set("a", 1, cashier.DefaultExpiration)
-	tc.Set("b", 2, cashier.NoExpiration)
+	tc := tlru.New(MaxUint, 50*time.Millisecond, 1*time.Millisecond)
+	tc.Set("a", 1, basecache.DefaultExpiration)
+	tc.Set("b", 2, basecache.NoExpiration)
 	tc.Set("c", 3, 20*time.Millisecond)
 	tc.Set("d", 4, 70*time.Millisecond)
 
@@ -99,37 +102,37 @@ func TestCacheTimes(t *testing.T) {
 	}
 }
 
-func TestNewFrom(t *testing.T) {
-	m := map[string]cashier.Item{
-		"a": {
-			Object:     1,
-			Expiration: 0,
-		},
-		"b": {
-			Object:     2,
-			Expiration: 0,
-		},
-	}
-	tc := cashier.NewFrom(cashier.NoItemLimit, cashier.DefaultExpiration, 0, m)
-	a, found := tc.Get("a")
-	if !found {
-		t.Fatal("Did not find a")
-	}
-	if a.(int) != 1 {
-		t.Fatal("a is not 1")
-	}
-	b, found := tc.Get("b")
-	if !found {
-		t.Fatal("Did not find b")
-	}
-	if b.(int) != 2 {
-		t.Fatal("b is not 2")
-	}
-}
+//func TestNewFrom(t *testing.T) {
+//	m := map[string]basecache.Item{
+//		"a": {
+//			Object:     1,
+//			Expiration: 0,
+//		},
+//		"b": {
+//			Object:     2,
+//			Expiration: 0,
+//		},
+//	}
+//	tc := cashier.NewFrom(basecache.NoItemLimit, basecache.DefaultExpiration, 0, m)
+//	a, found := tc.Get("a")
+//	if !found {
+//		t.Fatal("Did not find a")
+//	}
+//	if a.(int) != 1 {
+//		t.Fatal("a is not 1")
+//	}
+//	b, found := tc.Get("b")
+//	if !found {
+//		t.Fatal("Did not find b")
+//	}
+//	if b.(int) != 2 {
+//		t.Fatal("b is not 2")
+//	}
+//}
 
 func TestStorePointerToStruct(t *testing.T) {
-	tc := cashier.New(cashier.NoItemLimit, cashier.DefaultExpiration, 0)
-	tc.Set("foo", &TestStruct{Num: 1}, cashier.DefaultExpiration)
+	tc := tlru.New(MaxUint, basecache.DefaultExpiration, 0)
+	tc.Set("foo", &TestStruct{Num: 1}, basecache.DefaultExpiration)
 	x, found := tc.Get("foo")
 	if !found {
 		t.Fatal("*TestStruct was not found for foo")
@@ -148,8 +151,8 @@ func TestStorePointerToStruct(t *testing.T) {
 }
 
 func TestOnEvicted(t *testing.T) {
-	tc := cashier.New(cashier.NoItemLimit, cashier.DefaultExpiration, 0)
-	tc.Set("foo", 3, cashier.DefaultExpiration)
+	tc := tlru.New(MaxUint, basecache.DefaultExpiration, 0)
+	tc.Set("foo", 3, basecache.DefaultExpiration)
 	if tc.GetOnEvicted() != nil {
 		t.Fatal("tc.onEvicted is not nil")
 	}
@@ -158,7 +161,7 @@ func TestOnEvicted(t *testing.T) {
 		if k == "foo" && v.(int) == 3 {
 			works = true
 		}
-		tc.Set("bar", 4, cashier.DefaultExpiration)
+		tc.Set("bar", 4, basecache.DefaultExpiration)
 	})
 	tc.Delete("foo")
 	x, _ := tc.Get("bar")
