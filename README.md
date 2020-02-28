@@ -1,4 +1,9 @@
 # cashier
+[![Build Status](https://github.com/BradLugo/gocache/workflows/Go/badge.svg)](https://github.com/BradLugo/gocache/actions)
+[![codecov](https://codecov.io/gh/BradLugo/cashier/branch/master/graph/badge.svg)](https://codecov.io/gh/BradLugo/cashier)
+[![Go Report Card](https://goreportcard.com/badge/github.com/BradLugo/cashier)](https://goreportcard.com/report/github.com/BradLugo/cashier)
+[![License](https://img.shields.io/github/license/BradLugo/cashier)](https://img.shields.io/github/license/BradLugo/cashier)
+
 Simple thread-safe in-memory TLRU caching library for Go
 
 **If all you need is a thread-safe map for caching, we strongly encourage reviewing
