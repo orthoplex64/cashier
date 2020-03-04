@@ -10,7 +10,7 @@ import (
 )
 
 func TestCache_Delete(t *testing.T) {
-	tc := tlru.New(MaxUint, basecache.DefaultExpiration, 0)
+	tc := tlru.New(MaxInt, basecache.DefaultExpiration, 0)
 
 	for k, v := range cacheItemTests {
 		tc.Set(k, v.Object, time.Duration(v.Expiration))

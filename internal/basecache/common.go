@@ -36,11 +36,11 @@ type BaseCache struct {
 	Janitor           *janitor
 }
 
-func (c *BaseCache) SetJanitor() *janitor {
+func (c *BaseCache) GetJanitor() *janitor {
 	return c.Janitor
 }
 
-func (c *BaseCache) GetJanitor(j *janitor) {
+func (c *BaseCache) SetJanitor(j *janitor) {
 	c.Janitor = j
 }
 
@@ -49,7 +49,7 @@ func NewCache(d time.Duration, ci time.Duration, m map[string]Item, f func(strin
 	if ci > 0 {
 		j = &janitor{
 			Interval: ci,
-			Stop:     make(chan bool),
+			Stop:     make(chan struct{}),
 		}
 	}
 
@@ -67,6 +67,7 @@ func InitJanitor(c TimeAwareCache, bc *BaseCache, f func(TimeAwareCache)) TimeAw
 	}
 
 	go bc.Janitor.Run(c)
+	// wouldn't we still want to set the finalizer if bc.Janitor is nil?
 	runtime.SetFinalizer(c, f)
 
 	// TODO :: Do we need to return this or will passing the reference suffice?

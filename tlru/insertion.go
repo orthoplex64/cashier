@@ -18,7 +18,7 @@ func (c *Cache) Set(k string, x interface{}, d time.Duration) {
 			c.ll.PushFront(ek)
 		}
 
-		if c.maxItems != 0 && uint(c.ll.Len()) > c.maxItems {
+		if c.maxItems != 0 && c.ll.Len() > c.maxItems {
 			c.DeleteOldest()
 		}
 	}

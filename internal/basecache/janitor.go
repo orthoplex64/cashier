@@ -6,7 +6,7 @@ import (
 
 type janitor struct {
 	Interval time.Duration
-	Stop     chan bool
+	Stop     chan struct{}
 }
 
 func (j *janitor) Run(c TimeAwareCache) {

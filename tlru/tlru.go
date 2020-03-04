@@ -26,7 +26,7 @@ func New(maxItems int, defaultExpiration, cleanupInterval time.Duration) *Cache 
 
 func stopJanitor(tc basecache.TimeAwareCache) {
 	c := tc.(*Cache)
-	c.baseCache.Janitor.Stop <- true
+	c.baseCache.Janitor.Stop <- struct{}{}
 }
 
 func (c *Cache) OnEvicted(f func(string, interface{})) {

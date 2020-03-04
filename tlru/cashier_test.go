@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const MaxUint = ^uint(0)
+const MaxInt = int(^uint(0) >> 1)
 
 var cacheItemTests = map[string]basecache.Item{
 	"a": {
@@ -44,7 +44,7 @@ type TestStruct struct {
 }
 
 func TestNew(t *testing.T) {
-	tc := tlru.New(MaxUint, basecache.DefaultExpiration, 0)
+	tc := tlru.New(MaxInt, basecache.DefaultExpiration, 0)
 
 	if assert.NotNil(t, tc) {
 		assert.Equal(t, tc.GetMap(), map[string]basecache.Item{})
@@ -67,7 +67,7 @@ func TestNew(t *testing.T) {
 func TestCacheTimes(t *testing.T) {
 	var found bool
 
-	tc := tlru.New(MaxUint, 50*time.Millisecond, 1*time.Millisecond)
+	tc := tlru.New(MaxInt, 50*time.Millisecond, 1*time.Millisecond)
 	tc.Set("a", 1, basecache.DefaultExpiration)
 	tc.Set("b", 2, basecache.NoExpiration)
 	tc.Set("c", 3, 20*time.Millisecond)
@@ -131,7 +131,7 @@ func TestCacheTimes(t *testing.T) {
 //}
 
 func TestStorePointerToStruct(t *testing.T) {
-	tc := tlru.New(MaxUint, basecache.DefaultExpiration, 0)
+	tc := tlru.New(MaxInt, basecache.DefaultExpiration, 0)
 	tc.Set("foo", &TestStruct{Num: 1}, basecache.DefaultExpiration)
 	x, found := tc.Get("foo")
 	if !found {
@@ -151,7 +151,7 @@ func TestStorePointerToStruct(t *testing.T) {
 }
 
 func TestOnEvicted(t *testing.T) {
-	tc := tlru.New(MaxUint, basecache.DefaultExpiration, 0)
+	tc := tlru.New(MaxInt, basecache.DefaultExpiration, 0)
 	tc.Set("foo", 3, basecache.DefaultExpiration)
 	if tc.GetOnEvicted() != nil {
 		t.Fatal("tc.onEvicted is not nil")

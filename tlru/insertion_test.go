@@ -10,7 +10,7 @@ import (
 )
 
 func TestCache_Set(t *testing.T) {
-	tc := tlru.New(MaxUint, basecache.DefaultExpiration, 0)
+	tc := tlru.New(MaxInt, basecache.DefaultExpiration, 0)
 
 	for k, v := range cacheItemTests {
 		tc.Set(k, v.Object, time.Duration(v.Expiration))
@@ -20,7 +20,7 @@ func TestCache_Set(t *testing.T) {
 }
 
 func TestCache_SetDefault(t *testing.T) {
-	tc := tlru.New(MaxUint, basecache.DefaultExpiration, 0)
+	tc := tlru.New(MaxInt, basecache.DefaultExpiration, 0)
 
 	for k, v := range cacheItemTests {
 		tc.Set(k, v.Object, time.Duration(v.Expiration))
@@ -30,7 +30,7 @@ func TestCache_SetDefault(t *testing.T) {
 }
 
 func TestCache_Add(t *testing.T) {
-	tc := tlru.New(MaxUint, basecache.DefaultExpiration, 0)
+	tc := tlru.New(MaxInt, basecache.DefaultExpiration, 0)
 
 	for k, v := range cacheItemTests {
 		err := tc.Add(k, v.Object, time.Duration(v.Expiration))
@@ -46,7 +46,7 @@ func TestCache_Add(t *testing.T) {
 }
 
 func TestCache_Replace(t *testing.T) {
-	tc := tlru.New(MaxUint, basecache.DefaultExpiration, 0)
+	tc := tlru.New(MaxInt, basecache.DefaultExpiration, 0)
 
 	for k, v := range cacheItemTests {
 		tc.Set(k, v.Object, time.Duration(v.Expiration))
